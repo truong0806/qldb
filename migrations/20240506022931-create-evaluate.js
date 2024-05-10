@@ -2,29 +2,41 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Transactions", {
+    await queryInterface.createTable("Evaluates", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      type: {
-        type: Sequelize.INTEGER,
-      },
-      content: {
+      date: {
         type: Sequelize.STRING,
       },
-      value: {
-        type: Sequelize.INTEGER,
-      },
-      note: {
+      scored: {
         type: Sequelize.STRING,
       },
+      assist: {
+        type: Sequelize.STRING,
+      },
+      saveGoal: {
+        type: Sequelize.STRING,
+      },
+      ownGoal: {
+        type: Sequelize.STRING,
+      },
+      discipline: {
+        type: Sequelize.STRING,
+      },
+      yellowCard: {
+        type: Sequelize.STRING,
+      },
+      redCard: {
+        type: Sequelize.STRING,
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         allowNull: false,
@@ -33,6 +45,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Transactions");
+    await queryInterface.dropTable("Evaluates");
   },
 };

@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     birthday: DataTypes.DATE,
     tshift: DataTypes.FLOAT,
     position: DataTypes.STRING,
+    group_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Member',

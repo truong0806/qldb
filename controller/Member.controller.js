@@ -1,15 +1,43 @@
 const { Member, Group } = require("../models");
+const convertDateFormat = require("../ultils/convertDate");
 const createMember = async (req, res) => {
-  const { fullname, birthday, tshift, position, group_id } = req.body;
+  const { fullname, birthday, tshift, position, groupId } = req.body;
+  if (!fullname || !birthday || !tshift || !position || !groupId) {
+    return res.status(400).send({ error: "Missing required fields" });
+  }
+
   try {
-    const newMember = await Member.create({
+    const foundGroup = await Group.findByPk(groupId);
+    if (!foundGroup) {
+      return res.status(404).send({ error: "Group not found" });
+    }
+
+    const existingMember = await Member.findOne({
+      where: { tshift, group_id: groupId },
+    });
+    if (existingMember) {
+      return res.status(404).send({ error: "tshift number already exist" });
+    }
+
+    const isCaptain = position === "captain";
+    const existingCaptain = await Member.findOne({
+      where: { position: "Captain", group_id: groupId },
+    });
+    if (isCaptain && existingCaptain) {
+      return res.status(404).send({ error: "Group have only one captain" });
+    }
+
+    await Member.create({
       fullname,
-      birthday,
+      birthday: convertDateFormat(birthday),
       tshift,
       position,
-      group_id,
+      group_id: groupId,
     });
-    res.status(201).send(newMember);
+    res.status(201).send({
+      status: 201,
+      message: "Member created successfully",
+    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -39,7 +67,7 @@ const getAllMember = async (req, res) => {
     include: [
       {
         model: Group,
-        attributes: ['name']
+        attributes: ["name"],
       },
     ],
   });

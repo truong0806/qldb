@@ -3,20 +3,32 @@ const { Op } = require("sequelize");
 
 const createGroup = async (req, res) => {
   const { name, description, avatar, country, city, district } = req.body;
+  const userId = req.user.id;
   try {
+    const existingGroup = await Group.findOne({ where: { userId } });
+
+    if (existingGroup) {
+      return res.status(400).json({ error: "Group already exists" });
+    }
+
     const newGroup = await Group.create({
       name,
+      userId,
       description,
       avatar,
       country,
       city,
       district,
+      balance: 0,
+      ranking: 0,
     });
+
     res.status(201).send(newGroup);
   } catch (error) {
     res.status(500).send(error);
   }
 };
+
 const updateGroup = async (req, res) => {
   const { id } = req.params;
   const {
@@ -56,7 +68,6 @@ const getName = async (req, res) => {
   try {
     if (name) {
       const groupList = await Group.findAll({
-        
         where: {
           name: {
             [Op.like]: `%${name}%`,
@@ -86,4 +97,4 @@ const deleteGroup = async (req, res) => {
   }
 };
 
-module.exports = { createGroup, updateGroup, deleteGroup ,getName};
+module.exports = { createGroup, updateGroup, deleteGroup, getName };

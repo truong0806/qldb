@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Transactions", {
+    await queryInterface.createTable("MonthyFunds", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,19 +12,30 @@ module.exports = {
       type: {
         type: Sequelize.INTEGER,
       },
-      content: {
+      contributed_list: {
         type: Sequelize.STRING,
       },
-      value: {
+      uncontributed_list: {
+        type: Sequelize.STRING,
+      },
+      list_no_need: {
+        type: Sequelize.STRING,
+      },
+      collected: {
+        type: Sequelize.FLOAT,
+      },
+      date: {
+        type: Sequelize.STRING,
+      },
+      groupId: {
         type: Sequelize.INTEGER,
       },
-      note: {
-        type: Sequelize.STRING,
+      member_needs_to_pay: {
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         allowNull: false,
@@ -33,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Transactions");
+    await queryInterface.dropTable("MonthyFunds");
   },
 };

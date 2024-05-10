@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   const { email, password, fullname, phone } = req.body;
+  console.log("🚀 ~ register ~ email:", email);
   try {
     // tạo ra một chuỗi ngẫu nhiên
     const salt = bcrypt.genSaltSync(10);
@@ -25,6 +26,7 @@ const register = async (req, res) => {
 };
 const login = async (req, res) => {
   const { email, password } = req.body;
+  console.log("🚀 ~ login ~ email:", email);
   //b1: tìm ra user đang đăng nhập trên email
   const user = await User.findOne({
     where: {
@@ -37,6 +39,7 @@ const login = async (req, res) => {
     if (isAuth) {
       const token = jwt.sign(
         {
+          id: user.id,
           email: user.email,
           type: user.type,
           role: user.role,
@@ -56,4 +59,3 @@ module.exports = {
   register,
   login,
 };
-

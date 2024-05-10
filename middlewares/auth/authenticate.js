@@ -2,6 +2,11 @@ const jwt = require("jsonwebtoken");
 
 const authenticate = (req, res, next) => {
   const token = req.header("token");
+  if (!token || token === "null")
+    return res.status(401).send({
+      status: 401,
+      message: "Ban chua login",
+    });
   try {
     const decode = jwt.verify(token, "hieuvh9");
 
